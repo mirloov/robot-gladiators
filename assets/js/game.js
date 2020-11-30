@@ -1,23 +1,38 @@
+var fightOrSkip = function() {
+  var promptFight = window.prompt("Would you like FIGHT or SKIP this battle? Enter fight or skip to choose.");
+    
+    if (promptFight === "" || promptFight == null) {
+      window.alert("You need to provide a valid answer! Please try again");
+      return fightOrSkip();
+    }
+        promptFight = promptFight.toLowerCase();
 
-
-var fight = function(enemy) {
-  
-    while (enemy.health > 0 && playerInfo.health > 0) {       
-        var promptFight = window.prompt("would you like to FIGHT or SKIP this battle? enter 'F' for Fight or 'S' for Skip to choose.");
-
-        if (promptFight === "skip" || promptFight === "SKIP") { 
+        if (promptFight === "skip") { 
             var confirmSkip = window.confirm("Are you sure you'd like to quit?");
           
             if (confirmSkip) {
               window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
                 playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
+                
+                return true;
             }
-            }
-        var damage = randomNumber(playerInfo.attack-3, playerInfo.attack);
+      }
+      return false;
+  }
 
-        enemy.health = Math.max(0, enemy.health - damage);
+
+var fight = function(enemy) {
+  
+    while(enemy.health > 0 && playerInfo.health > 0) { 
+      // ask player if they'd like to fight or skip using fightOrSkip function 
+      if (fightOrSkip()) {
+      // if true, leave fight by breaking loop
+        break;
+      }                
+            
+      var damage = randomNumber(playerInfo.attack-3, playerInfo.attack);
+
+      enemy.health = Math.max(0, enemy.health - damage);
      console.log(
       playerInfo.name + " attacked " + enemy.name + ". " + enemy.name + " now has " + enemy.health + " health remaining."
     );
@@ -46,6 +61,7 @@ var fight = function(enemy) {
     }  
   }
 };    
+
 
 var randomNumber = function(min, max) {
   var value = Math.floor(Math.random() * (max - min +1)) + min;
